@@ -1,12 +1,12 @@
 const fs = require('fs');
 
-const numbers = fs.readFileSync('./02.txt', 'utf8').split('\n');
+const words = fs.readFileSync('./02.txt', 'utf8').split('\n');
 
 const letterTwoTimes = letterNTimes(2)
 const letterThreeTimes = letterNTimes(3)
 
-const letterTwos = numbers.map(letterTwoTimes).filter(Boolean).length
-const letterThrees = numbers.map(letterThreeTimes).filter(Boolean).length
+const letterTwos = words.map(letterTwoTimes).filter(Boolean).length
+const letterThrees = words.map(letterThreeTimes).filter(Boolean).length
 
 console.log(letterTwos, letterThrees, letterTwos * letterThrees)
 
