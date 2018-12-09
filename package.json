@@ -5,7 +5,8 @@
   "main": "01-1.js",
   "scripts": {
     "format": "prettier src/** --write",
-    "ts": "ts-node"
+    "ts": "ts-node",
+    "tsc": "tsc"
   },
   "keywords": [],
   "author": "",
