@@ -12,11 +12,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "date-fns": "^1.29.0",
+    "lodash": "^4.17.11",
     "prettier": "^1.15.3",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.118",
     "@types/node": "^10.12.12"
   }
 }
