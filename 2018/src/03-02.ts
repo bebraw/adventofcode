@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { difference, rangeIterable } from "./utils";
 
 type Area = {
   id: number;
@@ -26,18 +27,6 @@ const areas: Area[] = fs
 const foundCoordinates: { [key: string]: Area } = {};
 const allAreas: Set<Area> = new Set(areas);
 const duplicateAreas: Set<Area> = new Set();
-const rangeIterable = (min: number, max: number) => ({
-  *[Symbol.iterator]() {
-    let rangeIterator = range(min, max);
-    let rangeResult = rangeIterator.next();
-
-    while (!rangeResult.done) {
-      yield rangeResult.value;
-
-      rangeResult = rangeIterator.next();
-    }
-  }
-});
 
 areas.forEach(area => {
   for (let x of rangeIterable(area.x, area.x + area.w)) {
@@ -57,21 +46,3 @@ areas.forEach(area => {
 /*console.log("all", allAreas);
 console.log("duplicates", duplicateAreas);*/
 console.log("diff", difference(allAreas, duplicateAreas));
-
-function* range(min: number, max: number) {
-  let current = min;
-
-  while (current < max) {
-    yield current;
-
-    current++;
-  }
-}
-
-function difference<A>(setA: Set<A>, setB: Set<A>) {
-  var _difference = new Set(setA);
-  for (var elem of setB) {
-    _difference.delete(elem);
-  }
-  return _difference;
-}

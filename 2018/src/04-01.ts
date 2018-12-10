@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { differenceInMinutes } from "date-fns";
-import { countBy, toPairs } from "lodash";
+import { toPairs } from "lodash";
+import { rangeIterable } from "./utils";
 
 enum Operation {
   BEGINS_SHIFT = "begins_shift",
@@ -58,7 +59,11 @@ const sleepingTimes: {
   [key: string]: {
     id: Session["guard"];
     total: number;
-    times: number[];
+    times: {
+      begin: Date;
+      end: Date;
+      time: number;
+    }[];
   };
 } = {};
 sessions.forEach(({ guard, operation, timestamp }) => {
@@ -82,7 +87,11 @@ sessions.forEach(({ guard, operation, timestamp }) => {
       sleepingTimes[guard] = {
         id: sleepingTimes[guard].id,
         total: sleepingTimes[guard].total + time,
-        times: sleepingTimes[guard].times.concat(time)
+        times: sleepingTimes[guard].times.concat({
+          begin: sleepingTime,
+          end: timestamp,
+          time
+        })
       };
 
       break;
@@ -92,8 +101,26 @@ sessions.forEach(({ guard, operation, timestamp }) => {
 const mostAsleep = Object.values(sleepingTimes).sort(
   (a, b) => b.total - a.total
 )[0];
-const mostCommonSleepingTime = toPairs(countBy(mostAsleep.times)).sort(
-  (a, b) => b[1] - a[1]
+const sleepingMinutes: { [key: string]: number } = {};
+
+mostAsleep.times.forEach(time => {
+  for (let x of rangeIterable(
+    time.begin.getMinutes(),
+    time.begin.getMinutes() + time.time
+  )) {
+    let min = ((x % 60) + 1).toString();
+
+    if (!sleepingMinutes[min]) {
+      sleepingMinutes[min] = 0;
+    }
+
+    sleepingMinutes[min]++;
+  }
+});
+
+const mostCommonSleepingMinute = Number(
+  toPairs(sleepingMinutes).sort((a, b) => b[1] - a[1])[0][0]
 );
 
-console.log(mostAsleep.id * Number(mostCommonSleepingTime[0][0]));
+console.log(mostAsleep.id, mostCommonSleepingMinute);
+console.log(mostAsleep.id * mostCommonSleepingMinute);
