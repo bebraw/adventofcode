@@ -108,7 +108,7 @@ mostAsleep.times.forEach(time => {
     time.begin.getMinutes(),
     time.begin.getMinutes() + time.time
   )) {
-    let min = ((x % 60) + 1).toString();
+    let min = (x % 60).toString();
 
     if (!sleepingMinutes[min]) {
       sleepingMinutes[min] = 0;
